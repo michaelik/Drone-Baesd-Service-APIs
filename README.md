@@ -67,6 +67,7 @@ Username: **admin**
 
 Password: **password**
 
+---
 
 ### The REST Client should be able to:
 
@@ -85,6 +86,7 @@ The payload will have the following fields
 [![Create-New-Drone.png](https://i.postimg.cc/nrtQM428/Create-New-Drone.png)](https://postimg.cc/G8qp5s6z)
 The payload is in `json format` show as the left side of the image
 
+---
 
 **Check Drone battery level for a given drone**
 `localhost:8082/api/drone/battery`
@@ -96,6 +98,7 @@ The payload will have the following field
 [![Get-Drone-Battery.png](https://i.postimg.cc/MGNBJ2jp/Get-Drone-Battery.png)](https://postimg.cc/f37yYPKG)
 The payload is in `json format` show as the left side of the image
 
+---
 
 **Checking available drones for loading**
 
@@ -105,6 +108,7 @@ The payload will not accept any field or URL parameter
 
 [![Get-Available-Drone-For-Loading.png](https://i.postimg.cc/1tFq9Cpc/Get-Available-Drone-For-Loading.png)](https://postimg.cc/hzSjs0Zf)
 
+---
 
 **Loading a drone with medication items**
 
@@ -120,6 +124,7 @@ The payload will have the following fields
 [![Insert-Medication-Into-Drone.png](https://i.postimg.cc/rpK4HFsH/Insert-Medication-Into-Drone.png)](https://postimg.cc/wtY3yzh5)
 The payload is in `json format` show as the left side of the image
 
+---
 
 **Checking loaded medication items for a given drone**
 
@@ -129,6 +134,7 @@ The payload is in `json format` show as the left side of the image
 
 [![Get-Single-Drone-Medication-Details.png](https://i.postimg.cc/TY6rP6Ny/Get-Single-Drone-Medication-Details.png)](https://postimg.cc/fk83H6NZ)
 
+---
 
 **Delivery of medication item**
 
