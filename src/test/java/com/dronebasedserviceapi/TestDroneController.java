@@ -23,10 +23,14 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 
 import com.dronebasedserviceapi.controller.DroneController;
 import com.dronebasedserviceapi.model.Drone;
+import com.dronebasedserviceapi.model.Medication;
 import com.dronebasedserviceapi.payload.request.DroneBatteryRequest;
+import com.dronebasedserviceapi.payload.request.LoadDroneRequest;
 import com.dronebasedserviceapi.payload.request.RegisterDroneRequest;
 import com.dronebasedserviceapi.payload.response.AvailableDroneResponse;
 import com.dronebasedserviceapi.payload.response.DroneBatteryResponse;
+import com.dronebasedserviceapi.payload.response.DroneMedicationItemResponse;
+import com.dronebasedserviceapi.payload.response.LoadDroneResponse;
 import com.dronebasedserviceapi.payload.response.RegisterDroneResponse;
 import com.dronebasedserviceapi.service.DroneServiceImpl;
 
@@ -74,7 +78,7 @@ public class TestDroneController {
 	}
 
 	@Test
-	public void testCheckDroneBatteryLevel() {
+	public void testGetDroneBatteryLevel() {
 		RequestContextHolder.setRequestAttributes(new ServletRequestAttributes(request));
 
 		DroneBatteryResponse droneBatteryResponse = new DroneBatteryResponse();
@@ -114,5 +118,52 @@ public class TestDroneController {
 		assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.OK);
 		assertThat(responseEntity.getBody().getStatus()).isEqualTo("success");
 		assertThat(responseEntity.getBody().getDrones().size()).isEqualTo(2);
+	}
+	
+	@Test
+	public void testLoadDroneWithMedication() {
+		RequestContextHolder.setRequestAttributes(new ServletRequestAttributes(request));
+
+		LoadDroneResponse droneResponse = new LoadDroneResponse();
+		droneResponse.setResult("sucess");
+		droneResponse.setSerialNumber("Q23RT5676697");
+		droneResponse.setMessage("Drone Loaded successfully");
+		droneResponse.setTimestamp(java.time.LocalDateTime.now());
+
+		when(droneService.loadDroneWithMedication(any(LoadDroneRequest.class))).thenReturn(droneResponse);
+
+		LoadDroneRequest loadDroneRequest = new LoadDroneRequest();
+		loadDroneRequest.setSerialNumber("IK15690241");
+		loadDroneRequest.setSource("India");
+		loadDroneRequest.setDestination("USA");
+		loadDroneRequest.setCode("WE121212");
+		
+		ResponseEntity<LoadDroneResponse> responseEntity = droneController.loadDroneWithMedication(loadDroneRequest);
+		
+		assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.CREATED);
+		assertThat(responseEntity.getBody()).isEqualTo(droneResponse);
+
+	}
+	
+	@Test
+	public void testCheckLoadedMedicationItem() {
+		MockHttpServletRequest request = new MockHttpServletRequest();
+		RequestContextHolder.setRequestAttributes(new ServletRequestAttributes(request));
+
+		Medication medication = new Medication("WE121212", "Abilify", 100, "sade23rd");
+		
+		DroneMedicationItemResponse droneMedicationItemResponse = new DroneMedicationItemResponse();
+		droneMedicationItemResponse.setResult("success");
+		droneMedicationItemResponse.setSerialNumber("IK15690241");
+		droneMedicationItemResponse.setTimestamp(java.time.LocalDateTime.now());
+		droneMedicationItemResponse.setMedication(medication);
+
+		String serialNumber = "IK15690241";
+		when(droneService.getLoadedMedicationForADrone(serialNumber)).thenReturn(droneMedicationItemResponse);
+
+		ResponseEntity<DroneMedicationItemResponse> responseEntity = droneController.checkLoadedMedicationItem(serialNumber);
+		
+		assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.OK);
+		assertThat(responseEntity.getBody()).isEqualTo(droneMedicationItemResponse);
 	}
 }
